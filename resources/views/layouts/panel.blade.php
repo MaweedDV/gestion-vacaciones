@@ -21,7 +21,7 @@
             ['ruta'=>'mi-panel.index','patron'=>'mi-panel*','icono'=>'person-vcard','texto'=>'Mi panel','roles'=>['funcionario']],
             ['ruta'=>'calendario.index','patron'=>'calendario*','icono'=>'calendar3','texto'=>'Calendario','roles'=>['administrador']],
             ['ruta'=>'vacaciones.index','patron'=>'vacaciones*','icono'=>'calendar2-check','texto'=>'Vacaciones','roles'=>['administrador','jefatura','funcionario','aprobador_general']],
-            ['ruta'=>'reemplazos.index','patron'=>'reemplazos*','icono'=>'arrow-left-right','texto'=>'Reemplazos','roles'=>['administrador']],
+            ['ruta'=>'reemplazos.index','patron'=>'reemplazos*','icono'=>'arrow-left-right','texto'=>'Reemplazos','roles'=>['administrador','jefatura']],
             ['ruta'=>'funcionarios.index','patron'=>'funcionarios*','icono'=>'people','texto'=>'Funcionarios','roles'=>['administrador']],
             ['ruta'=>'departamentos.index','patron'=>'departamentos*','icono'=>'diagram-3','texto'=>'Departamentos','roles'=>['administrador']],
             ['ruta'=>'saldos.index','patron'=>'saldos*','icono'=>'wallet2','texto'=>'Saldos','roles'=>['administrador']],

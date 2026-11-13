@@ -174,10 +174,10 @@ class SolicitudVacacionController extends Controller
         try {
             $solicitud = SolicitudVacacion::with('funcionario.departamento')->findOrFail($solicitudId);
             $funcionario = $solicitud->funcionario;
-            // Jefaturas de la unidad, aprobadores generales: no incluye administradores observadores.
+            // Jefaturas de la unidad, aprobadores generales y administradores de todo el sistema.
             $destinatarios = User::query()->where('activo', true)
                 ->where(function ($q) use ($funcionario) {
-                    $q->where('rol', 'aprobador_general')->orWhere(function ($j) use ($funcionario) {
+                    $q->whereIn('rol', ['aprobador_general', 'administrador'])->orWhere(function ($j) use ($funcionario) {
                         $j->where('rol', 'jefatura')->where('departamento_gestion_id', $funcionario->departamento_id);
                     });
                 })->where('id', '!=', $funcionario->user_id ?? 0)->get();
@@ -223,9 +223,8 @@ class SolicitudVacacionController extends Controller
 
     private function autorizarResolucion($usuario, SolicitudVacacion $solicitud): void
     {
-        // Aprobador general puede resolver en cualquier unidad; jefatura solo en su departamento.
-        // El administrador supervisa y no tiene permiso de aprobación por este flujo.
-        abort_unless($usuario && $usuario->tieneRol('jefatura', 'aprobador_general'), 403);
+        // Administrador y aprobador general resuelven solicitudes de cualquier unidad; jefatura solo de su departamento.
+        abort_unless($usuario && $usuario->tieneRol('administrador', 'jefatura', 'aprobador_general'), 403);
         if ($usuario->tieneRol('jefatura')) {
             abort_unless($usuario->departamento_gestion_id
                 && $solicitud->funcionario->departamento_id === $usuario->departamento_gestion_id, 403);

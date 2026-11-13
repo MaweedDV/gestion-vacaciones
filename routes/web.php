@@ -39,7 +39,7 @@ Route::middleware(['auth', EnsureRole::class.':administrador,jefatura,funcionari
     Route::get('vacaciones/crear', [SolicitudVacacionController::class, 'create'])->name('vacaciones.create');
     Route::post('vacaciones', [SolicitudVacacionController::class, 'store'])->name('vacaciones.store');
 });
-Route::middleware(['auth', EnsureRole::class.':jefatura,aprobador_general'])->group(function () {
+Route::middleware(['auth', EnsureRole::class.':administrador,jefatura,aprobador_general'])->group(function () {
     Route::post('vacaciones/{solicitud}/aprobar', [SolicitudVacacionController::class, 'aprobar'])->name('vacaciones.aprobar');
     Route::post('vacaciones/{solicitud}/rechazar', [SolicitudVacacionController::class, 'rechazar'])->name('vacaciones.rechazar');
 });
@@ -54,12 +54,15 @@ Route::middleware(['auth', EnsureRole::class.':administrador'])->group(function 
     Route::delete('feriados/{feriado}', [FeriadoController::class, 'destroy'])->name('feriados.destroy');
     Route::get('calendario', [CalendarioController::class, 'index'])->name('calendario.index');
     Route::get('calendario/eventos', [CalendarioController::class, 'eventos'])->name('calendario.eventos');
+    Route::post('vacaciones/{solicitud}/cancelar', [SolicitudVacacionController::class, 'cancelar'])->name('vacaciones.cancelar');
+});
+Route::middleware(['auth', EnsureRole::class.':administrador,jefatura'])->group(function () {
     Route::get('reemplazos', [ReemplazoController::class, 'index'])->name('reemplazos.index');
     Route::get('reemplazos/solicitud/{solicitud}', [ReemplazoController::class, 'create'])->name('reemplazos.create');
     Route::post('reemplazos/solicitud/{solicitud}', [ReemplazoController::class, 'store'])->name('reemplazos.store');
     Route::post('reemplazos/{reemplazo}/confirmar', [ReemplazoController::class, 'confirmar'])->name('reemplazos.confirmar');
     Route::post('reemplazos/{reemplazo}/cancelar', [ReemplazoController::class, 'cancelar'])->name('reemplazos.cancelar');
-    Route::post('vacaciones/{solicitud}/cancelar', [SolicitudVacacionController::class, 'cancelar'])->name('vacaciones.cancelar');
+    Route::post('reemplazos/{reemplazo}/rechazar', [ReemplazoController::class, 'rechazar'])->name('reemplazos.rechazar');
 });
 Route::middleware(['auth', EnsureRole::class.':administrador'])->group(function () {
     Route::get('auditorias', [AuditoriaController::class, 'index'])->name('auditorias.index');

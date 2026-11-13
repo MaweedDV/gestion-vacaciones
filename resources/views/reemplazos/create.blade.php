@@ -2,7 +2,8 @@
 @section('title','Planificar reemplazo')
 @section('content')
 <a href="{{ route('reemplazos.index') }}">&larr; Volver a reemplazos</a>
-<h1 class="h3 mt-3">Planificar cobertura</h1>
+<h1 class="h3 mt-3">Indicar reemplazante</h1>
+@if(auth()->user()->tieneRol('jefatura'))<div class="alert alert-info">Solo aparecen candidatos de tu departamento. La confirmación estará habilitada cuando las vacaciones estén aprobadas.</div>@endif
 <p>Funcionario: <strong>{{ $solicitud->funcionario->nombres }} {{ $solicitud->funcionario->apellidos }}</strong> ·
 {{ $solicitud->funcionario->departamento->nombre }} · Vacaciones: {{ $solicitud->fecha_inicio->format('d/m/Y') }} al {{ $solicitud->fecha_fin->format('d/m/Y') }}</p>
 @if($alerta)<div class="alert alert-warning"><strong>Advertencia de dotación:</strong> {{ $alerta }}. La designación debe ser evaluada por la jefatura.</div>@endif
@@ -11,7 +12,7 @@
 <div class="col-md-4"><label class="form-label">Hasta</label><input type="date" class="form-control" name="hasta" value="{{ $hasta }}" min="{{ $solicitud->fecha_inicio->toDateString() }}" max="{{ $solicitud->fecha_fin->toDateString() }}"></div>
 <div class="col-md-4 d-flex align-items-end"><button class="btn btn-secondary">Actualizar sugerencias</button></div>
 </form>
-<p class="text-muted">La puntuación solo ordena candidatos: misma unidad +30, competencia coincidente +10 y carga reciente -3 por reemplazo. La jefatura valida las competencias y pertinencia.</p>
+<p class="text-muted">La puntuación solo ordena candidatos: misma unidad +30, competencia coincidente +10 y carga reciente -3 por reemplazo. La jefatura verifica competencias y pertinencia antes de confirmar.</p>
 <div class="table-responsive"><table class="table table-bordered align-middle">
 <thead><tr><th>Candidato</th><th>Unidad</th><th>Competencias coincidentes</th><th>Carga</th><th>Puntaje</th><th>Evaluación</th><th>Asignación manual</th></tr></thead>
 <tbody>@forelse($sugerencias as $item)
@@ -24,5 +25,5 @@
 <button class="btn btn-sm btn-primary" onclick="return confirm('¿Proponer a este funcionario?')">Proponer</button></form>@else — @endif</td></tr>
 @empty<tr><td colspan="7">No hay candidatos.</td></tr>@endforelse
 </tbody></table></div>
-<p class="small text-muted">Se pueden asignar tramos sucesivos a diferentes funcionarios. La cobertura completa del período aún debe verificarse administrativamente.</p>
+<p class="small text-muted">Se pueden proponer tramos sucesivos para distintos funcionarios. La cobertura completa del período aún debe verificarse administrativamente.</p>
 @endsection
